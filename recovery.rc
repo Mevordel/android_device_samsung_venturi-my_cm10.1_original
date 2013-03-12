@@ -1,0 +1,81 @@
+on early-init
+    start ueventd
+
+on init
+    export PATH /sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin
+    export LD_LIBRARY_PATH /vendor/lib:/system/lib
+    export ANDROID_ROOT /system
+    export ANDROID_DATA /data
+    export EXTERNAL_STORAGE /sdcard
+
+    loglevel 9
+
+    symlink /system/etc /etc
+
+    mkdir /sdcard
+    mkdir /emmc
+    mkdir /system
+    mkdir /data
+    mkdir /cache
+    mkdir /efs
+    mkdir /tmp
+
+    mkdir /mnt 0775 root root
+    chown root shell /tmp
+    chmod 0775 /tmp
+
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 18D1
+    write /sys/class/android_usb/android0/idProduct D001
+    write /sys/class/android_usb/android0/functions adb
+    write /sys/class/android_usb/android0/iManufacturer ${ro.product.manufacturer}
+    write /sys/class/android_usb/android0/iProduct ${ro.product.model}
+    write /sys/class/android_usb/android0/iSerial ${ro.serialno}
+
+on fs
+    mount tmpfs tmpfs /tmp
+    mount rfs  /dev/block/mmcblk0p10 /efs wait ro
+    mount ext4 /dev/block/mmcblk0p13 /system wait rw
+    mount ext4 /dev/block/mmcblk0p15 /cache nosuid nodev noatime wait
+
+# Mount param to not get stuck
+    mkdir /mnt/.lfs
+    mount j4fs /dev/block/mmcblk0p9 /mnt/.lfs
+    insmod /lib/modules/param.ko
+
+# Reset param values
+    write /proc/param/debug 1
+
+on post-fs
+    mount rootfs rootfs / ro remount
+
+    write /proc/sys/kernel/panic_on_oops 1
+    write /proc/sys/kernel/hung_task_timeout_secs 0
+    write /proc/cpu/alignment 4
+    write /proc/sys/kernel/sched_latency_ns 10000000
+    write /proc/sys/kernel/sched_wakeup_granularity_ns 2000000
+    write /proc/sys/kernel/sched_compat_yield 1
+    write /proc/sys/kernel/sched_child_runs_first 0
+	
+on boot
+    ifup lo
+    hostname localhost
+    domainname localdomain
+
+    class_start default
+
+service ueventd /sbin/ueventd
+    critical
+
+service console /sbin/sh
+    console
+
+service recovery /sbin/recovery
+
+service adbd /sbin/adbd recovery
+
+on property:persist.service.adb.enable=1
+    start adbd
+
+on property:persist.service.adb.enable=0
+    start adbd

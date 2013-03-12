@@ -1,0 +1,37 @@
+on early-init
+    start ueventd
+
+on init
+    export PATH /sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin
+    export LD_LIBRARY_PATH /vendor/lib:/system/lib
+    export ANDROID_ROOT /system
+    export ANDROID_DATA /data
+
+    symlink /system/etc /etc
+
+    mkdir /sdcard
+    mkdir /system
+    mkdir /tmp
+
+on fs
+    mount tmpfs tmpfs /tmp
+    mount ext4 /dev/block/mmcblk0p13 /system wait ro
+
+on boot
+    ifup lo
+    hostname localhost
+    domainname localdomain
+
+    class_start default
+
+service ueventd /sbin/ueventd
+    critical
+
+service console /sbin/sh
+    console
+
+service playlpm /system/bin/playlpm
+    oneshot
+
+service lpmkey /system/bin/charging_mode
+    oneshot
