@@ -20,11 +20,7 @@
 #firmware/CE147F03.bin 
 
 # RIL
-#bin/rild
-#lib/libril.so
-#lib/libsec-ril.so
-#lib/libsec-ril-apalone.so
-#lib/libsecril-client.so
+lib/libsecril-client.so
 
 # GPS
 vendor/bin/gpsd
@@ -56,12 +52,8 @@ vendor/firmware/bcm4329.hcd
 # Sensors
 vendor/bin/geomagneticd
 vendor/bin/orientationd
-vendor/lib/libsensorservice.so
-vendor/lib/libsensor_yamaha_test.so
 lib/hw/sensors.default.so
-vendor/lib/hw/copybit.s5pc110.so
 vendor/lib/hw/lights.s5pc110.so
-vendor/lib/hw/overlay.s5pc110.so
 
 # Charging Mode
 bin/playlpm
