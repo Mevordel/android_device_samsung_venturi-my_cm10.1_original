@@ -40,14 +40,16 @@ on fs
 # Mount param
     mkdir /mnt/.lfs/
     mount j4fs /dev/block/mmcblk0p9 /mnt/.lfs noatime
-    insmod /lib/modules/param.ko
 
 # permissions for bluetooth.
     chown bluetooth net_bt_stack /dev/s3c2410_serial0
     chmod 0600 /dev/s3c2410_serial0
     chmod 0660 /sys/class/rfkill/rfkill0/state
+    chmod 0660 /sys/class/rfkill/rfkill1/state
     chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/state
     chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/type
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill1/state
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill1/type
 
 # Permissions for System Server and daemons.
     chown system system /sys/class/backlight/s5p_bl/brightness
@@ -110,7 +112,7 @@ service wpa_supplicant /system/bin/wpa_supplicant \
     disabled
     oneshot
 
-service dhcpcd_wlan0 /system/bin/dhcpcd -BKA
+service dhcpcd_wlan0 /system/bin/dhcpcd -aABDKL
     disabled
     oneshot
 
@@ -128,27 +130,6 @@ on property:init.svc.bootanim=running
 
 on property:init.svc.wpa_supplicant=stopped
     stop dhcpcd_wlan0
-
-service btld /system/bin/logwrapper /system/bin/btld -hb 3000000 -hp /dev/s3c2410_serial0 -lpm 1
-    user root
-    group bluetooth net_bt_admin
-    disabled
-    oneshot
-
-# start btld if soft_onoff is enabled
-on property:service.brcm.bt.soft_onoff=1
-    start btld
-
-# stop btld if soft_onoff is disabled
-on property:service.brcm.bt.soft_onoff=0
-    stop btld
-
-service hciattach /system/bin/logwrapper /system/bin/brcm_patchram_plus --enable_hci --enable_lpm \
-    --baudrate 3000000 --patchram /vendor/firmware/bcm4329.hcd /dev/s3c2410_serial0
-    user bluetooth
-    group bluetooth net_bt_admin
-    disabled
-    oneshot
 
 # bugreport is triggered by holding down volume down, volume up and power
 #service bugreport /system/bin/dumpstate -d -v -o /sdcard/bugreports/bugreport

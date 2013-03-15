@@ -88,7 +88,8 @@ WIFI_DRIVER_FW_PATH_AP       := "/vendor/firmware/fw_bcmdhd_apsta.bin"
 # Bluetooth
 BOARD_HAVE_BLUETOOTH         := true
 BOARD_HAVE_BLUETOOTH_BCM     := true
-BOARD_BLUEDROID_VENDOR_CONF  := device/samsung/aries-common/libbt_vndcfg.txt
+BOARD_BLUEDROID_VENDOR_CONF  := device/samsung/venturi/prebuilt/libbt_vndcfg.txt
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/samsung/venturi/bluetooth
 
 # Camera
 ifeq ($(USE_CAMERA_STUB),false)
