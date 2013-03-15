@@ -37,8 +37,10 @@ PRODUCT_COPY_FILES += \
 
 # Prebuilt configuration files
 PRODUCT_COPY_FILES += \
-	device/samsung/venturi/prebuilt/etc/gps.conf:system/etc/gps.conf \
+	device/samsung/venturi/prebuilt/etc/asound.conf:system/etc/asound.conf \
 	device/samsung/venturi/prebuilt/etc/audio_policy.conf:system/etc/audio_policy.conf \
+	device/samsung/venturi/prebuilt/etc/bluetooth/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf \
+	device/samsung/venturi/prebuilt/etc/gps.conf:system/etc/gps.conf \
 	device/samsung/venturi/prebuilt/etc/media_codecs.xml:system/etc/media_codecs.xml \
 	device/samsung/venturi/prebuilt/etc/media_profiles.xml:system/etc/media_profiles.xml \
 	device/samsung/venturi/prebuilt/etc/vold.fstab:system/etc/vold.fstab \
@@ -56,10 +58,10 @@ PRODUCT_PACKAGES += \
 
 # Prebuilt kl keymaps
 PRODUCT_COPY_FILES += \
+	device/samsung/venturi/prebuilt/usr/idc/cytma340_input.idc:system/usr/idc/cytma340_input.idc \
 	device/samsung/venturi/prebuilt/usr/keylayout/s3c-keypad.kl:system/usr/keylayout/s3c-keypad.kl \
 	device/samsung/venturi/prebuilt/usr/keylayout/sec_jack.kl:system/usr/keylayout/sec_jack.kl \
 	device/samsung/venturi/prebuilt/usr/keylayout/cytma340_input.kl:system/usr/keylayout/cytma340_input.kl \
-	device/samsung/venturi/prebuilt/usr/idc/cytma340_input.idc:system/usr/idc/cytma340_input.idc
 
 # Generated kcm keymaps
 PRODUCT_PACKAGES += \
@@ -144,6 +146,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.bt.bdaddr_path=/data/bdaddr \
 	ro.sf.lcd_density=240
+
+# WiFi
+PRODUCT_PACKAGES += \
+	libnetcmdiface
 
 # Include additional hardware makefiles
 # Broadcom Wi-Fi
