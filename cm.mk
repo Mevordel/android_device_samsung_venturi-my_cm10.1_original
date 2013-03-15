@@ -1,7 +1,7 @@
 $(call inherit-product, device/samsung/venturi/full_venturi.mk)
 
 # Inherit some common CM stuff.
-$(call inherit-product, vendor/cm/config/common_full_phone.mk)
+$(call inherit-product, vendor/cm/config/common_mini_tablet_wifionly.mk)
 
 PRODUCT_NAME := cm_venturi
 PRODUCT_DEVICE := venturi
