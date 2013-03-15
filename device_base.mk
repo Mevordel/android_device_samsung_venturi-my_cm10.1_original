@@ -28,9 +28,12 @@ TARGET_BOOTANIMATION_NAME := vertical-480x800
 PRODUCT_COPY_FILES += \
 	device/samsung/venturi/fstab.venturi:root/fstab.venturi \
 	device/samsung/venturi/init.venturi.rc:root/init.venturi.rc \
+	device/samsung/venturi/init.venturi.gps.rc:root/init.venturi.gps.rc \
 	device/samsung/venturi/init.venturi.usb.rc:root/init.venturi.usb.rc \
 	device/samsung/venturi/lpm.rc:root/lpm.rc \
-	device/samsung/venturi/ueventd.venturi.rc:root/ueventd.venturi.rc
+	device/samsung/venturi/ueventd.venturi.rc:root/ueventd.venturi.rc \
+	device/samsung/venturi/init.venturi.usb.rc:recovery/root/usb.rc \
+	device/samsung/venturi/init.recovery.venturi.rc:root/init.recovery.venturi.rc
 
 # Prebuilt configuration files
 PRODUCT_COPY_FILES += \
@@ -48,8 +51,8 @@ PRODUCT_PACKAGES += \
 	audio.a2dp.default \
 	audio.usb.default \
 	camera.s5pc110 \
-	hwcomposer.s5pc110 \
-	power.s5pc110
+	power.s5pc110 \
+#	hwcomposer.s5pc110
 
 # Prebuilt kl keymaps
 PRODUCT_COPY_FILES += \
@@ -87,11 +90,9 @@ PRODUCT_PACKAGES += \
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
-	frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
+	frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml \
 	frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
 	frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
-	frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
-        frameworks/native/data/etc/android.hardware.location.xml:system/etc/permissions/android.hardware.location.xml \
 	frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
 	frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
 	frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
@@ -136,7 +137,13 @@ PRODUCT_TAGS += dalvik.gc.type-precise
 # Set default USB interface and default to external SD card
 PRODUCT_PROPERTY_OVERRIDES += \
 	persist.sys.usb.config=mass_storage \
+	ro.vold.switchablepair=/storage/sdcard0,/storage/sdcard1 \
 	persist.sys.vold.switchexternal=1
+
+# Other properties
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.bt.bdaddr_path=/data/bdaddr \
+	ro.sf.lcd_density=240
 
 # Include additional hardware makefiles
 # Broadcom Wi-Fi
@@ -148,3 +155,7 @@ $(call inherit-product-if-exists, hardware/samsung/Android.mk)
 
 # Inherit proprietary vendor files
 $(call inherit-product-if-exists, vendor/samsung/venturi/venturi-vendor.mk)
+
+# Set this here temporarily so ADB works
+ADDITIONAL_DEFAULT_PROPERTIES += ro.adb.secure=0
+

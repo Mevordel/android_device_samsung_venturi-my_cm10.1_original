@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# BoardConfig.mk
+# BoardConfigCommon.mk
 #
 # Product-specific compile-time definitions.
 #
@@ -52,7 +52,6 @@ BOARD_CUSTOM_BOOTIMG_MK      := device/samsung/venturi/shbootimg.mk
 
 # Recovery
 TARGET_RECOVERY_PRE_COMMAND  := "echo 1 > /cache/.startrecovery; sync;"
-TARGET_RECOVERY_INITRC       := device/samsung/venturi/recovery.rc
 BOARD_CUSTOM_GRAPHICS        := ../../../device/samsung/venturi/recovery/graphics.c
 BOARD_HAS_NO_SELECT_BUTTON   := true
 
@@ -71,18 +70,18 @@ TARGET_BOOTANIMATION_USE_RGB565 := true
 # Vold
 BOARD_VOLD_MAX_PARTITIONS    := 17
 BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true
-BOARD_UMS_LUNFILE := "/sys/devices/platform/usb_mass_storage/lun0/file"
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/usb_mass_storage/lun%d/file
 
 # Connectivity - Wi-Fi
 WPA_SUPPLICANT_VERSION       := VER_0_8_X
 BOARD_WPA_SUPPLICANT_DRIVER  := NL80211
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_bcmdhd
+BOARD_HOSTAPD_DRIVER         := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB    := lib_driver_cmd_bcmdhd
 BOARD_WLAN_DEVICE            := bcmdhd
 BOARD_WLAN_DEVICE_REV        := bcm4329
 WIFI_DRIVER_MODULE_NAME      := "bcmdhd"
-WIFI_DRIVER_MODULE_PATH      := "/system/lib/modules/bcmdhd.ko"
-WIFI_DRIVER_MODULE_ARG       := "firmware_path=/vendor/firmware/fw_bcmdhd.bin nvram_path=/vendor/firmware/nvram_net.txt"
+WIFI_DRIVER_FW_PATH_PARAM    := "/sys/module/bcmdhd/parameters/firmware_path"
 WIFI_DRIVER_FW_PATH_STA      := "/vendor/firmware/fw_bcmdhd.bin"
 WIFI_DRIVER_FW_PATH_AP       := "/vendor/firmware/fw_bcmdhd_apsta.bin"
 
@@ -108,6 +107,13 @@ USE_OPENGL_RENDERER          := true
 BOARD_EGL_CFG                := device/samsung/venturi/prebuilt/lib/egl/egl.cfg
 BOARD_ALLOW_EGL_HIBERNATION  := true
 
+# TARGET_DISABLE_TRIPLE_BUFFERING can be used to disable triple buffering
+# on per target basis. On crespo it is possible to do so in theory
+# to save memory, however, there are currently some limitations in the
+# OpenGL ES driver that in conjunction with disable triple-buffering
+# would hurt performance significantly (see b/6016711)
+TARGET_DISABLE_TRIPLE_BUFFERING := false
+
 # Touchscreen
 BOARD_USE_LEGACY_TOUCHSCREEN := true
 
@@ -115,4 +121,7 @@ BOARD_USE_LEGACY_TOUCHSCREEN := true
 BOARD_HAVE_FM_RADIO          := true
 BOARD_FM_DEVICE              := si4709
 
-#WITH_SEC_OMX                 := true
+WITH_SEC_OMX                 := true
+
+# hwcomposer: custom vsync ioctl
+#BOARD_CUSTOM_VSYNC_IOCTL := true

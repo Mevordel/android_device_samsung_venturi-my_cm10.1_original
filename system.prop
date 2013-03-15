@@ -1,8 +1,0 @@
-#
-# system.prop for venturi
-#
-#rild.libpath=/system/lib/libsec-ril-apalone.so
-#rild.libargs=-d /dev/ttyS0
-ro.bt.bdaddr_path=/data/bdaddr
-ro.sf.lcd_density=240
-persist.sys.usb.config=mass_storage
