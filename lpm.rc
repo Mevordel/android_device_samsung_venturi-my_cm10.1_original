@@ -6,12 +6,18 @@ on init
     export LD_LIBRARY_PATH /vendor/lib:/system/lib
     export ANDROID_ROOT /system
     export ANDROID_DATA /data
+    export EXTERNAL_STORAGE /storage/sdcard0
 
     symlink /system/etc /etc
 
     mkdir /sdcard
     mkdir /system
+    mkdir /data
+    mkdir /cache
+    mkdir /efs
     mkdir /tmp
+
+    mkdir /mnt 0775 root root
 
 on fs
     mount tmpfs tmpfs /tmp
@@ -30,8 +36,18 @@ service ueventd /sbin/ueventd
 service console /sbin/sh
     console
 
+# adbd is controlled by the persist.service.adb.enable system property
+service adbd /sbin/adbd
+#    disabled
+
 service playlpm /system/bin/playlpm
     oneshot
 
 service lpmkey /system/bin/charging_mode
     oneshot
+
+on property:persist.service.adb.enable=1
+    start adbd
+
+on property:persist.service.adb.enable=0
+    stop adbd

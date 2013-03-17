@@ -1,3 +1,5 @@
+LOCAL_PATH := $(call my-dir)
+
 ifneq ($(filter venturi venturiusa,$(TARGET_DEVICE)),)
-    include $(all-subdir-makefiles)
+    include $(call all-makefiles-under,$(LOCAL_PATH))
 endif

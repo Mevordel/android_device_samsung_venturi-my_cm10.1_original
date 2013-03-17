@@ -19,7 +19,7 @@
 include device/samsung/venturi/BoardConfigCommon.mk
 
 # Use the European-specific defconfig
-TARGET_KERNEL_CONFIG := cyanogenmod_venturi_defconfig
+TARGET_KERNEL_CONFIG := yp_g70_eur_defconfig
 
 # Correct OTA asserts for this device (+ backward-compatibility)
 TARGET_OTA_ASSERT_DEVICE := YP-G70,venturi_usa,venturi
